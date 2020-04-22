@@ -1,0 +1,120 @@
+@base-color: rgb(30,30,30);
+
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+html {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* 移动端 */
+
+/* ios用户点击一个链接，会出现一个半透明灰色遮罩, 
+   如果想要禁用，可设置-webkit-tap-highlight-color的alpha值为0
+ */
+a, button, input, textarea {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+}
+
+body {
+  background: #ffffff;
+}
+textarea.form-control{
+  resize: none;
+  border: none !important;
+  color: #cdcdcd !important;
+  font-size: 16px !important;
+  line-height: 1.5;
+  &:focus{
+    border: none !important;
+  }
+}
+textarea:focus{
+
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: @base-color
+}
+
+::-webkit-scrollbar-track {
+  background-color: @base-color
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(204, 204, 204, 0.53);
+}
+
+::-webkit-scrollbar-corner {
+  background-color: @base-color
+}
+
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9{
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+.control-label{
+  color: #d48345;
+}
+.nav-tabs{
+}
+.nav-tabs>li>a{
+  border-radius: 0 !important;
+  color: #fff;
+  line-height: 1;
+  margin-right:0 !important;
+  &:hover{
+    color: #555;
+  }
+}
+
+.form-control[disabled], fieldset[disabled] .form-control{
+  background-color: rgba(30,30,30,.6) !important;
+  color: #919191 !important;
+}
+.btn-around{
+  padding:0 20px 20px;
+  max-width: 500px;
+}
+.form-around{
+  padding: 20px;
+  color: #8ed03d;
+  max-width: 500px;
+  display: flex;
+  .form-around-label label{
+    padding-right: 10px;
+  }
+  .form-around-label>div ,.form-around-input>div{
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    align-items: center;
+  }
+  .form-around-input{
+    flex: 1;
+    .form-group{
+      margin-bottom: 0 !important;
+    }
+  }
+}
+.form-control{
+  background-color: @base-color !important;
+  color: #eeeeee !important;
+  font-size: 16px !important;
+}
+.mloading.mloading-mask {
+  background: rgba(0,0,0,0.6) !important;
+}
