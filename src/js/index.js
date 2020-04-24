@@ -58,6 +58,50 @@ $(document).ready(function () {
     })
 
 
+    var $d7input = $('#demo7 input').focus(function() {
+        console.log('focus')
+        $('.dropdown-date', '#demo7').remove();
+        var $dropdown = $('<div class="dropdown-date"/>')
+            .appendTo('#demo7');
+        setTimeout(function(){
+            $dropdown.datetimepicker({
+                date: $d7input.data('value') || new Date(),
+                viewMode: 'YMDHMS',
+                onDateChange: function(){
+                    $d7input.val(this.getText('YYYY-MM-DD HH:mm:ss'));
+                    $d7input.data('value', this.getValue());
+
+                },
+                onOk:function () {
+                    $dropdown.remove();
+                }
+            })
+        }, 100);
+
+    });
+    let $d8input = $('#demo8 input').focus(function() {
+        console.log('focus')
+        $('.dropdown-date', '#demo7').remove();
+        let $dropdown = $('<div class="dropdown-date"/>')
+            .appendTo('#demo8');
+        setTimeout(function(){
+            $dropdown.datetimepicker({
+                date: $d8input.data('value') || new Date(),
+                viewMode: 'YMDHMS',
+                onDateChange: function(){
+                    $d8input.val(this.getText('YYYY-MM-DD HH:mm:ss'));
+                    $d8input.data('value', this.getValue());
+
+                },
+                onOk:function () {
+                    $dropdown.remove();
+                }
+            })
+        }, 100);
+
+    });
+
+
     function clickhide() {
         ZENG.msgbox._hide();
     }
@@ -100,7 +144,7 @@ $(document).ready(function () {
         let parity = $("#parity").val();
         if (!port) {
             console.log('请选择端口');
-            ZENG.msgbox.show('请选择端口', 1, 1000);
+            swal('请选择端口');
             return false
         }
         addValInTextarea(JSON.stringify({
@@ -127,11 +171,13 @@ $(document).ready(function () {
                 console.log('response:', response);
                 portIsOpened = true;
                 checkDisabled();
-                ZENG.msgbox.show('打开端口成功', 4, 1000);
+                showSucess('打开端口成功')
+                // ZENG.msgbox.show('打开端口成功', 4, 1000);
 
             },
             error: function (error) {
-                ZENG.msgbox.show(error.responseJSON.message, 5, 1000);
+                showError(error)
+                // ZENG.msgbox.show(error.responseJSON.message, 5, 1000);
                 console.log('error', error);
             }
         });
@@ -157,7 +203,7 @@ $(document).ready(function () {
 
             },
             error: function (error) {
-                ZENG.msgbox.show(error.responseJSON.message, 5, 1000);
+                showError(error)
                 console.log('error', error);
             }
         });
@@ -180,7 +226,7 @@ $(document).ready(function () {
     //使输入框disabled
     function checkDisabled() {
         let shouldChangeArr = ['#port', '#baudRate', '#data-bit', '#stop-bit', '#parity', '#open-test']
-        let shouldReverseChangeArr = ['#close-test', '#get-test']
+        let shouldReverseChangeArr = ['#close-test', '#get-flow','#read-StandardTime','#write-StandardTime1','#start-testing','#get-preciseFlow','#write-data','#get-debugging','#get-preciseFlow','#change-number']
         if (portIsOpened) {
             for (let i = 0; i < shouldChangeArr.length; i++) {
                 $(shouldChangeArr[i]).attr({
@@ -228,7 +274,11 @@ $(document).ready(function () {
         },
         error: function (error) {
             console.log('error', error);
-            ZENG.msgbox.show('获取端口失败', 5, 1000);
+            swal({
+                title:'获取端口失败,请检查网络',
+                icon: "error",
+                closeOnClickOutside: false,
+            });
         }
     });
 
@@ -367,7 +417,7 @@ $(document).ready(function () {
             }),
             success: function (response) {
                 console.log('response:', response);
-                ZENG.msgbox.show('写入成功', 4, 1000);
+                ZENG.msgbox.show('写入成功', 2, 1000);
             },
             error: function (error) {
                 console.log('error', error);
@@ -376,6 +426,72 @@ $(document).ready(function () {
         });
     })
 
+
+    $('#start-testing').click(function () {
+        $.ajax({
+            type: "POST",
+            url: `${config.prefix}/meter-service/start-testing`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('启动测检成功')
+            },
+            error: function (error) {
+                showError(error)
+
+            }
+        });
+    })
+    $('#write-StandardTime').click(function () {
+        let standardTime=$('#standardTime').val();
+        let sendData={};
+        if(standardTime){
+            sendData.year=(new Date($('#standardTime').val())).getFullYear();
+            sendData.month=(new Date($('#standardTime').val())).getMonth();
+            sendData.day=(new Date($('#standardTime').val())).getDate();
+            sendData.hour=(new Date($('#standardTime').val())).getHours();
+            sendData.minute=(new Date($('#standardTime').val())).getMinutes();
+            sendData.second=(new Date($('#standardTime').val())).getSeconds();
+        }
+        console.log('sendData',sendData)
+        $.ajax({
+            type: "POST",
+            url: `${config.prefix}/meter-service/standard-time`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(sendData),
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('写入标准时间成功')
+                $(`.standardTimeData`).val(response.standardTimeData)
+            },
+            error: function (error) {
+                showError(error)
+
+            }
+        });
+    })
+
+    $('#read-StandardTime').click(function () {
+        $.ajax({
+            type: "GET",
+            url: `${config.prefix}/meter-service/standard-time`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('读取标准时间成功');
+                let date=`${response.year}-${fixedZero(response.month)}-${fixedZero(response.day)} ${fixedZero(response.hour)}:${fixedZero(response.minute)}:${fixedZero(response.second)}`
+                $('#demo7 input').val(date);
+                $('#demo7 input').data('value', date);
+            },
+            error: function (error) {
+                showError(error)
+
+            }
+        });
+    })
     function changeLoadOpen() {
         console.log('changeLoadOpen', logOpened)
         if (logOpened) {

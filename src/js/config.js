@@ -28,3 +28,16 @@ function checkPalindrom(str) {
     return str.split('').reverse().join('');
 
 }
+function showSucess(message) {
+    ZENG.msgbox.show(message, 4, 2000);
+    swal(message, "", "success");
+}
+function showError(error) {
+    console.log('error', error);
+    swal(error.responseJSON?error.responseJSON.message:'出现未知错误，请重试', "", "error");
+    // ZENG.msgbox.show(error.responseJSON?error.responseJSON.message:'出现未知错误，请重试', 5, 2500);
+}
+
+function fixedZero(val) {
+    return val * 1 < 10 ? `0${val}` : val;
+}

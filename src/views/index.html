@@ -4,9 +4,10 @@
     ##include('../include/base.html')
     <title>水表写入器</title>
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" href="http://jiandaoyun.github.io/Perfect-DateTimePicker/dist/jquery.datetimepicker.min.css">
     <script src="https://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
     <link rel="stylesheet" href="http://www.jq22.com/demo/jquery-tsk20150817/msgbox.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
@@ -17,6 +18,8 @@
             crossorigin="anonymous"></script>
     <script src="https://cdn.bootcss.com/cleave.js/1.5.10/cleave.min.js"></script>
     <script src="http://www.jq22.com/demo/jquery-tsk20150817/msgbox.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="http://jiandaoyun.github.io/Perfect-DateTimePicker/dist/jquery.datetimepicker.min.js"></script>
 </head>
 <body>
 <div class="container-box">
@@ -25,7 +28,7 @@
             <div class="basic-set">
                 基本设置
             </div>
-            <form class="form-horizontal" >
+            <form class="form-horizontal">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-4 control-label">端 口 名</label>
                     <div class="col-sm-8">
@@ -66,27 +69,29 @@
                     <div class="col-sm-8">
                         <select class="form-control" id="parity">
                             <option value="0">无</option>
-                            <option  value="1">奇</option>
-                            <option  value="2">偶</option>
+                            <option value="1">奇</option>
+                            <option value="2">偶</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group ">
                     <div class=" col-sm-offset-4 col-sm-8">
-                        <button id="open-test" type="button" class="btn btn-primary" style="margin-right: 10px">打开</button>
+                        <button id="open-test" type="button" class="btn btn-primary" style="margin-right: 10px">打开
+                        </button>
                         <button id="close-test" type="button" class="btn btn-danger">关闭</button>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label  class="col-sm-12 control-label" style="text-align: center;font-size: 18px">水表地址</label>
+                    <label class="col-sm-12 control-label" style="text-align: center;font-size: 18px">水表地址</label>
                     <div class="col-sm-offset-1 col-sm-11">
-                        <input id="broadcast-address"  class="form-control Cleave" value="AAAAAAAAAAAAAA" placeholder="地址">
+                        <input id="broadcast-address" class="form-control Cleave" value="AAAAAAAAAAAAAA"
+                               placeholder="地址">
 
                     </div>
 
                     <div class="col-sm-offset-1 col-sm-11 checkbox" style="color:#FFF">
                         <label>
-                            <input  type="checkbox" id="use-broadcast"> 使用广播地址
+                            <input checked type="checkbox" id="use-broadcast"> 使用广播地址
 
                         </label>
                     </div>
@@ -102,22 +107,23 @@
                 <div class="nav-container">
                     <div class="nav-content">
                         <ul class="nav nav-tabs" style="width: 1500px">
-                            <li role="presentation" ><a href="#getTest"  data-toggle="tab">读调试界面数据</a></li>
-                            <li role="presentation"  ><a href="#getFlow"  data-toggle="tab">读取流量数据</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">读取高精度流量数据</a></li>
-                            <li role="presentation"  class="active"><a href="#write"  data-toggle="tab">写当前数据</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">启动检测</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">写标准时间</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">修改表号/地址</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">写出厂日期</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">转换运行模式</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">流量修正</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">USM测试</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">阀门控制</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">读Lora参数</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">写Lora参数</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">写水表参数</a></li>
-                            <li role="presentation" ><a href="#order"  data-toggle="tab">自定义</a></li>
+                            <li role="presentation"><a href="#getTest" data-toggle="tab">读调试界面数据</a></li>
+                            <li role="presentation"><a href="#getFlow" data-toggle="tab">读取流量数据</a></li>
+                            <li role="presentation"><a href="#order" data-toggle="tab">读取高精度流量数据</a></li>
+                            <li role="presentation"><a href="#write" data-toggle="tab">写当前数据</a></li>
+                            <li role="presentation"><a href="#startTest" data-toggle="tab">启动检测</a></li>
+                            <li role="presentation"><a href="#changeNumber" data-toggle="tab">修改表号/地址</a></li>
+                            <li role="presentation"><a href="#writeStandardTime" data-toggle="tab">写标准时间</a></li>
+                            <li role="presentation"><a href="#writeStandardTime2" data-toggle="tab">写出厂日期</a></li>
+                            <li role="presentation"><a href="#changeMode" data-toggle="tab">转换运行模式</a></li>
+                            <li role="presentation"><a href="#flowFix" data-toggle="tab">流量修正</a></li>
+                            <li role="presentation"><a href="#usmTest" data-toggle="tab">USM测试</a></li>
+                            <li role="presentation"><a href="#valveContral" data-toggle="tab">阀门控制</a></li>
+                            <li role="presentation" class="active"><a href="#readLora" data-toggle="tab">读Lora参数</a>
+                            </li>
+                            <li role="presentation"><a href="#writeLora" data-toggle="tab">写Lora参数</a></li>
+                            <li role="presentation"><a href="#writeMeterParams" data-toggle="tab">写水表参数</a></li>
+                            <li role="presentation"><a href="#custom" data-toggle="tab">自定义</a></li>
                         </ul>
                     </div>
 
@@ -131,89 +137,91 @@
                 <div class="tab-pane fade in" id="getTest">
                     <div class="form-around">
                         <div class="form-around-label">
-                            <div >
-                                <label >程序版本号: </label>
+                            <div>
+                                <label>程序版本号: </label>
                             </div>
                             <div>
-                                <label >供回水标志: </label>
+                                <label>供回水标志: </label>
                             </div>
                             <div>
-                                <label >仪表系数: </label>
+                                <label>仪表系数: </label>
                             </div>
                             <div>
-                                <label >低流速切除: </label>
+                                <label>低流速切除: </label>
                             </div>
                             <div>
-                                <label >流量补偿值1: </label>
+                                <label>流量补偿值1: </label>
                             </div>
                             <div>
-                                <label >流量补偿值2: </label>
+                                <label>流量补偿值2: </label>
                             </div>
                             <div>
-                                <label >流量补偿值3: </label>
+                                <label>流量补偿值3: </label>
                             </div>
                             <div>
-                                <label >流量补偿值4(最小流量点): </label>
+                                <label>流量补偿值4(最小流量点): </label>
                             </div>
                             <div>
-                                <label >供水温度补偿值: </label>
+                                <label>供水温度补偿值: </label>
                             </div>
                             <div>
-                                <label >回水温度补偿值: </label>
+                                <label>回水温度补偿值: </label>
                             </div>
                             <div>
-                                <label >口径: </label>
+                                <label>口径: </label>
                             </div>
                             <div>
-                                <label >启用日期(YYMMDD): </label>
+                                <label>启用日期(YYMMDD): </label>
                             </div>
                         </div>
                         <div class="form-around-input">
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-programVersion" readonly >
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control" id="get-debugging-programVersion" readonly>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input  class="form-control"   id="get-debugging-supplyReturnFlag" readonly >
+                            <div class="form-group  input-group">
+                                <input class="form-control" id="get-debugging-supplyReturnFlag" readonly>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-instrumentFactor" readonly>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control" id="get-debugging-instrumentFactor" readonly>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number " class="form-control "  id="get-debugging-lowFlowExcision" readonly>
+                            <div class="form-group  input-group">
+                                <input type="number " class="form-control " id="get-debugging-lowFlowExcision" readonly>
                             </div>
-                            <div  class="form-group  input-group">
+                            <div class="form-group  input-group">
                                 <input type="number" class="form-control" id="get-debugging-flowCompensation1" readonly>
-                                <div class="input-group-addon"  >%</div>
+                                <div class="input-group-addon">%</div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-flowCompensation2" readonly>
-                                <div class="input-group-addon"  >%</div>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control" id="get-debugging-flowCompensation2" readonly>
+                                <div class="input-group-addon">%</div>
 
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-flowCompensation3" readonly>
-                                <div class="input-group-addon"  >%</div>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control" id="get-debugging-flowCompensation3" readonly>
+                                <div class="input-group-addon">%</div>
 
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-flowCompensation4" readonly>
-                                <div class="input-group-addon"  >%</div>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control" id="get-debugging-flowCompensation4" readonly>
+                                <div class="input-group-addon">%</div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-supplyingTemperatureCompensation" readonly>
-                                <div class="input-group-addon"  >℃</div>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control"
+                                       id="get-debugging-supplyingTemperatureCompensation" readonly>
+                                <div class="input-group-addon">℃</div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-returningTemperatureCompensation" readonly>
-                                <div class="input-group-addon"  >℃</div>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control"
+                                       id="get-debugging-returningTemperatureCompensation" readonly>
+                                <div class="input-group-addon">℃</div>
 
                             </div>
-                            <div  class="form-group input-group">
-                                <input type="number" class="form-control"  id="get-debugging-caliber" readonly>
-                                <div class="input-group-addon"  >DN</div>
+                            <div class="form-group input-group">
+                                <input type="number" class="form-control" id="get-debugging-caliber" readonly>
+                                <div class="input-group-addon">DN</div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" class="form-control"  id="get-debugging-introductionDate" readonly>
+                            <div class="form-group  input-group">
+                                <input type="number" class="form-control" id="get-debugging-introductionDate" readonly>
                             </div>
                         </div>
                     </div>
@@ -227,70 +235,70 @@
                 <div class="tab-pane fade  in" id="getFlow">
                     <div class="form-around">
                         <div class="form-around-label">
-                            <div >
-                                <label >累计流量: </label>
+                            <div>
+                                <label>累计流量: </label>
                             </div>
                             <div>
-                                <label >负累计流量: </label>
+                                <label>负累计流量: </label>
                             </div>
                             <div>
-                                <label >实时时钟(YYYYMMDDHHMMSS): </label>
+                                <label>实时时钟(YYYYMMDDHHMMSS): </label>
                             </div>
                             <div>
-                                <label >位域: </label>
+                                <label>位域: </label>
                             </div>
                             <div>
-                                <label >阀门状态: </label>
+                                <label>阀门状态: </label>
                             </div>
                         </div>
                         <div class="form-around-input">
-                            <div  class="form-group input-group">
-                                <input type="number" id="get-flow-sumOfFlow" readonly class="form-control"  >
-                                <div class="input-group-addon"  id="get-flow-unit1"></div>
+                            <div class="form-group input-group">
+                                <input type="number" id="get-flow-sumOfFlow" readonly class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1"></div>
 
                             </div>
-                            <div  class="form-group input-group">
-                                <input type="number" readonly id="get-flow-negSumOfFlow"  class="form-control"  >
-                                <div class="input-group-addon"  id="get-flow-unit2"></div>
+                            <div class="form-group input-group">
+                                <input type="number" readonly id="get-flow-negSumOfFlow" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit2"></div>
 
                             </div>
-                            <div  class="form-group ">
-                                <input  readonly class="form-control" id="get-flow-realTimeClock" value="" >
+                            <div class="form-group ">
+                                <input readonly class="form-control" id="get-flow-realTimeClock" value="">
                             </div>
-                            <div  class="form-group ">
-                                <input type="number" readonly id="get-flow-bitField" class="form-control" >
+                            <div class="form-group ">
+                                <input type="number" readonly id="get-flow-bitField" class="form-control">
                             </div>
-                            <div  class="form-group ">
-                                <input type="text" readonly id="get-flow-status" class="form-control"  >
+                            <div class="form-group ">
+                                <input type="text" readonly id="get-flow-status" class="form-control">
                             </div>
                             <p class="checkbox">
                                 <label>
-                                    <input readonly  type="checkbox" id="get-flow-b2">电池欠压
+                                    <input readonly type="checkbox" id="get-flow-b2">电池欠压
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label>
-                                    <input  readonly type="checkbox" id="get-flow-b3">阀门电池欠压
+                                    <input readonly type="checkbox" id="get-flow-b3">阀门电池欠压
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label>
-                                    <input  readonly type="checkbox" id="get-flow-b4">阀门电子铅封被打开过
+                                    <input readonly type="checkbox" id="get-flow-b4">阀门电子铅封被打开过
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label>
-                                    <input  readonly type="checkbox" id="get-flow-b5">水表电子铅封被打开过
+                                    <input readonly type="checkbox" id="get-flow-b5">水表电子铅封被打开过
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label>
-                                    <input  readonly type="checkbox" id="get-flow-b6">温度传感器故障
+                                    <input readonly type="checkbox" id="get-flow-b6">温度传感器故障
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label>
-                                    <input  readonly type="checkbox" id="get-flow-b7">阀门无响应
+                                    <input readonly type="checkbox" id="get-flow-b7">阀门无响应
                                 </label>
                             </p>
                         </div>
@@ -304,43 +312,43 @@
                 <div class="tab-pane fade" id="order">
                     <div class="form-around">
                         <div class="form-around-label">
-                            <div >
-                                <label >累计冷量: </label>
+                            <div>
+                                <label>累计冷量: </label>
                             </div>
                             <div>
-                                <label >累计热量: </label>
+                                <label>累计热量: </label>
                             </div>
                             <div>
-                                <label >瞬时功率: </label>
+                                <label>瞬时功率: </label>
                             </div>
                             <div>
-                                <label >瞬时流量: </label>
+                                <label>瞬时流量: </label>
                             </div>
                             <div>
-                                <label >累计流量: </label>
+                                <label>累计流量: </label>
                             </div>
                         </div>
                         <div class="form-around-input">
-                            <div  class="form-group  input-group">
-                                <input type="number" id="get-preciseFlow-sumOfCooling" readonly class="form-control"  >
-                                <div class="input-group-addon"  id="get-preciseFlow-unit1"></div>
+                            <div class="form-group  input-group">
+                                <input id="get-preciseFlow-sumOfCooling" readonly class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit1"></div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number" readonly id="get-preciseFlow-sumOfHeat"  class="form-control"  >
-                                <div class="input-group-addon"  id="get-preciseFlow-unit2"></div>
+                            <div class="form-group  input-group">
+                                <input readonly id="get-preciseFlow-sumOfHeat" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit2"></div>
 
                             </div>
-                            <div  class="form-group  input-group">
-                                <input  readonly class="form-control" id="get-preciseFlow-instantPower" value="" >
-                                <div class="input-group-addon"  id="get-preciseFlow-unit3"></div>
+                            <div class="form-group  input-group">
+                                <input readonly class="form-control" id="get-preciseFlow-instantPower" value="">
+                                <div class="input-group-addon" id="get-preciseFlow-unit3"></div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="text" readonly id="get-preciseFlow-instantFlow" class="form-control"  >
-                                <div class="input-group-addon"  id="get-preciseFlow-unit4"></div>
+                            <div class="form-group  input-group">
+                                <input type="text" readonly id="get-preciseFlow-instantFlow" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit4"></div>
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="text" readonly id="get-preciseFlow-sumOfFlow" class="form-control"  >
-                                <div class="input-group-addon"  id="get-preciseFlow-unit5"></div>
+                            <div class="form-group  input-group">
+                                <input type="text" readonly id="get-preciseFlow-sumOfFlow" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit5"></div>
                             </div>
                         </div>
                     </div>
@@ -350,46 +358,49 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade in active" id="write">
+                <div class="tab-pane fade" id="write">
                     <div class="form-around">
                         <div class="form-around-label">
-                            <div >
-                                <label >累计冷量: </label>
+                            <div>
+                                <label>累计冷量: </label>
                             </div>
                             <div>
-                                <label >累计冷量单位: </label>
+                                <label>累计冷量单位: </label>
                             </div>
                             <div>
-                                <label >累计热量: </label>
+                                <label>累计热量: </label>
                             </div>
                             <div>
-                                <label >累计热量单位: </label>
+                                <label>累计热量单位: </label>
                             </div>
                             <div>
-                                <label >累计流量: </label>
+                                <label>累计流量: </label>
                             </div>
                             <div>
-                                <label >累计流量单位: </label>
+                                <label>累计流量单位: </label>
                             </div>
                         </div>
                         <div class="form-around-input">
-                            <div  class="form-group  input-group">
-                                <input type="number" min="0" max="9999999999" value="0.0" class="form-control"  id="write-data-sumOfCooling"  >
+                            <div class="form-group  input-group">
+                                <input type="number" min="0" max="9999999999" value="0.0" class="form-control"
+                                       id="write-data-sumOfCooling">
                             </div>
-                            <div  class="form-group  input-group">
-                                <input  class="form-control" value="Wh"  id="write-data-unit1"  >
+                            <div class="form-group  input-group">
+                                <input class="form-control" value="Wh" id="write-data-unit1">
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number"  min="0" max="9999999999" value="0.0" class="form-control"  id="write-data-sumOfHeat"  >
+                            <div class="form-group  input-group">
+                                <input type="number" min="0" max="9999999999" value="0.0" class="form-control"
+                                       id="write-data-sumOfHeat">
                             </div>
-                            <div  class="form-group  input-group">
-                                <input  class="form-control"  value="Wh"   id="write-data-unit2"  >
+                            <div class="form-group  input-group">
+                                <input class="form-control" value="Wh" id="write-data-unit2">
                             </div>
-                            <div  class="form-group  input-group">
-                                <input type="number"  min="0" max="999999.99" value="0.0" class="form-control"  id="write-data-sumOfFlow"  >
+                            <div class="form-group  input-group">
+                                <input type="number" min="0" max="999999.99" value="0.0" class="form-control"
+                                       id="write-data-sumOfFlow">
                             </div>
-                            <div  class="form-group  input-group">
-                                <input  class="form-control"    value="L"  id="write-data-unit3"  >
+                            <div class="form-group  input-group">
+                                <input class="form-control" value="L" id="write-data-unit3">
                             </div>
                         </div>
                     </div>
@@ -399,6 +410,462 @@
                         </div>
                     </div>
                 </div>
+                <div class="tab-pane fade" id="startTest">
+                    <div class="btn-around">
+                        <div class="form-around-btn" style="margin-top: 20px">
+                            <button id="start-testing" type="button" class="btn  btn-primary  btn-block">启动测检</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="changeNumber">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div>
+                                <label>新地址: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <input class="form-control Cleave" id="new_address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="change-number" type="button" class="btn  btn-primary  btn-block">写入</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="writeStandardTime">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div>
+                                <label>标准时间: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <div class="dateTime-wrap" id="demo7">
+                                    <input readonly id="standardTime" class="form-control"
+                                           placeholder="YYYY-MM-DD hh:mm:ss"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+
+                            <button id="read-StandardTime" type="button" class="btn  btn-success  btn-block"
+                                    style="margin-bottom: 10px">读取
+                            </button>
+                            <button id="write-StandardTime" type="button" class="btn  btn-primary  btn-block">写入
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="writeStandardTime2">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div>
+                                <label>标准时间: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <div class="dateTime-wrap" id="demo8">
+                                    <input readonly id="standardTime2" class="form-control"
+                                           placeholder="YYYY-MM-DD hh:mm:ss"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+
+                            <button id="read-StandardTime" type="button" class="btn  btn-success  btn-block"
+                                    style="margin-bottom: 10px">读取
+                            </button>
+                            <button id="write-StandardTime" type="button" class="btn  btn-primary  btn-block">写入
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade " id="changeMode">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div>
+                                <label>运行模式: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group ">
+                                <select class="form-control" id="mode">
+                                    <option>退出工厂模式</option>
+                                    <option>进入工厂模式</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+
+                            <button id="read-mode" type="button" class="btn  btn-success  btn-block"
+                                    style="margin-bottom: 10px">读取
+                            </button>
+                            <button id="write-mode" type="button" class="btn  btn-primary  btn-block">写入</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="flowFix">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div>
+                                <label>流量修正点1: </label>
+                            </div>
+                            <div>
+                                <label>流量修正点2: </label>
+                            </div>
+                            <div>
+                                <label>流量修正点3: </label>
+                            </div>
+                            <div>
+                                <label>流量修正点4: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <input id="flow-fix1" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix2" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix3" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="set-flowFix" type="button" class="btn  btn-primary  btn-block">写入</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="usmTest">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div style="height: 120px;    align-items: flex-start;">
+                                <label>出错代码1: </label>
+                            </div>
+                            <div>
+                                <label>出错代码2: </label>
+                            </div>
+                            <div>
+                                <label>PW1ST_UP: </label>
+                            </div>
+                            <div>
+                                <label>PW1ST_DOWN: </label>
+                            </div>
+                            <div>
+                                <label>ToF_UP: </label>
+                            </div>
+                            <div>
+                                <label>ToF_DOWN: </label>
+                            </div>
+                            <div>
+                                <label>dToF: </label>
+                            </div>
+                            <div>
+                                <label>ToF_FILT: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <p class="checkbox">
+                                <label>
+                                    <input readonly type="checkbox" id="get-flow-b2">TIMEOUT_UP
+                                </label>
+                            </p>
+                            <p class="checkbox">
+                                <label>
+                                    <input readonly type="checkbox" id="get-flow-b3">TIMEOUT_DOWN
+                                </label>
+                            </p>
+                            <p class="checkbox">
+                                <label>
+                                    <input readonly type="checkbox" id="get-flow-b3">PW1ST_UP
+                                </label>
+                            </p>
+                            <p class="checkbox">
+                                <label>
+                                    <input readonly type="checkbox" id="get-flow-b3">PW1ST_DOWN
+                                </label>
+                            </p>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix1" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix2" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix3" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit1">uS</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit1">uS</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit1">uS</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-preciseFlow-unit1">uS</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="set-usmTest" type="button" class="btn  btn-primary  btn-block"
+                                    style="margin-bottom: 10px">开始测试
+                            </button>
+                            <button id="set-usmTest" type="button" class="btn  btn-success  btn-block">读取结果</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="valveContral">
+                    <div class="form-around">
+                        <div class="form-around-label">
+
+                            <div>
+                                <label>阀门状态: </label>
+                            </div>
+                            <div>
+                                <label>出错代码: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <select class="form-control" id="baudRate">
+                                    <option>未知</option>
+                                    <option>水表不支持阀控</option>
+                                    <option>已开</option>
+                                    <option>正在开</option>
+                                    <option>正在关</option>
+                                    <option>已关</option>
+                                    <option>故障</option>
+                                </select>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix1" class="form-control">
+                            </div>
+                            <p class="checkbox">
+                                <label>
+                                    <input readonly type="checkbox" id="get-flow-b2">开阀超时
+                                </label>
+                            </p>
+                            <p class="checkbox">
+                                <label>
+                                    <input readonly type="checkbox" id="get-flow-b3">关阀超时
+                                </label>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="set-usmTest" type="button" class="btn  btn-primary  btn-block"
+                                    style="margin-bottom: 10px">开阀
+                            </button>
+                            <button id="set-usmTest" type="button" class="btn  btn-danger  btn-block"
+                                    style="margin-bottom: 10px">关阀
+                            </button>
+                            <button id="set-usmTest" type="button" class="btn  btn-success  btn-block">读取阀门状态</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade  in active" id="readLora">
+                    <div class="form-around" style="flex-direction: column">
+                        <table class="table table-bordered">
+                           <thead>
+                           <tr>
+                               <th>名称</th>
+                               <th>数值</th>
+                           </tr>
+                           </thead>
+                            <tbody>
+
+                            </tbody>
+
+                        </table>
+                        <div class="empty">
+                            暂无内容
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="set-usmTest" type="button" class="btn  btn-success  btn-block">读取Lora数据</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="writeLora">
+                    <div class="form-around">
+                        <div class="form-around-label">
+                            <div>
+                                <label>DEV_EUI: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <input class="form-control Cleave" id="new_address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="change-number" type="button" class="btn  btn-primary  btn-block">写入</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="writeMeterParams">
+                    <div class="btn-around" style="padding:15px 20px 0;margin-bottom: 0">
+                        <div class="form-around-btn">
+                            <p class="bg-info" style="padding: 10px;margin-bottom: 0">注意:为避免出错，每次更换设备后，请先读取一次</p>
+                        </div>
+                    </div>
+                    <div class="form-around">
+
+                        <div class="form-around-label">
+                            <div>
+                                <label>采样时间: </label>
+                            </div>
+                            <div>
+                                <label>零漂: </label>
+                            </div>
+                            <div>
+                                <label>PW1ST阈值: </label>
+                            </div>
+                            <div>
+                                <label>ToF上限: </label>
+                            </div>
+                            <div>
+                                <label>ToF下限: </label>
+                            </div>
+                            <div>
+                                <label>dToF最大值: </label>
+                            </div>
+                            <div>
+                                <label>起始流量: </label>
+                            </div>
+                            <div>
+                                <label>管段横向长度L1: </label>
+                            </div>
+                            <div>
+                                <label>管段纵向长度L2: </label>
+                            </div>
+                            <div>
+                                <label>管段半径: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <input id="flow-fix1" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">ms</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix2" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">Lh</div>
+
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix3" class="form-control">
+
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">uS</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">uS</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">uS</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">Lh</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">mm</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">mm</div>
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                                <div class="input-group-addon" id="get-flow-unit1">mm</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="set-flowFix" type="button" class="btn  btn-success  btn-block"  style="margin-bottom: 10px">读取</button>
+                            <button id="set-flowFix" type="button" class="btn  btn-primary  btn-block">写入</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="custom">
+                    <div class="form-around">
+
+                        <div class="form-around-label">
+                            <div>
+                                <label>仪表类型: </label>
+                            </div>
+                            <div>
+                                <label>控制码: </label>
+                            </div>
+                            <div>
+                                <label>定制数据: </label>
+                            </div>
+                            <div>
+                                <label>数据长度: </label>
+                            </div>
+                        </div>
+                        <div class="form-around-input">
+                            <div class="form-group  input-group">
+                                <input id="flow-fix1" class="form-control">
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix2" class="form-control">
+
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix3" class="form-control">
+
+                            </div>
+                            <div class="form-group  input-group">
+                                <input id="flow-fix4" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn-around">
+                        <div class="form-around-btn">
+                            <button id="set-flowFix" type="button" class="btn  btn-primary  btn-block">发送</button>
+                        </div>
+                    </div>
+                </div>
+
+
             </div>
 
         </div>
