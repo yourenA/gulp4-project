@@ -135,6 +135,20 @@ $(document).ready(function () {
     //初始化打开关闭按钮
     checkDisabled()
 
+    $.ajaxSetup({
+        dataType: "json",
+        contentType: "application/json;charset=utf-8",
+        timeout : 5000,
+    })
+
+    $(document).bind("ajaxSend", function () {
+        console.log('ajaxStart')
+        $('.loader').css("display","block");
+    }).bind("ajaxComplete", function () {
+        console.log('ajaxComplete')
+        $('.loader').css("display","none");
+    });
+
     //开始测试
     $("#open-test").click(function () {
         let port = $("#port").val();
