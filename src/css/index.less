@@ -16,7 +16,7 @@
     }
     .tab-arrow {
       width: 32px;
-      height: 40px;
+      height: 70px;
       position: absolute;
       top: 0;
       cursor: pointer;
@@ -37,6 +37,7 @@
   }
 
   .nav-tabs {
+    height: 69px;
     transition: transform .3s cubic-bezier(.645,.045,.355,1),-webkit-transform .3s cubic-bezier(.645,.045,.355,1);
     white-space: nowrap;
     font-size: 0;
@@ -45,27 +46,47 @@
     width: auto;
 
     li {
+      height: 69px;
       float: none;
       font-size: 14px;
       display: inline-block;
       box-sizing: border-box;
+      border: none;
+      a{
+        height: 100%;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        img{
+          width: 40px;
+          height: 40px;
+        }
+      }
     }
 
   }
 
   .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
-    color: #7dff49;
+    color: #2d91eb;
     cursor: default;
-    background-color: #1c1c1a;
-    border: 1px solid #ddd;
-    border-top:none;
-    border-bottom-color: transparent;
+    background-image: url('./../images/zzbg.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border:none;
+    height: 69px;
   }
 
   .nav > li > a:focus, .nav > li > a:hover {
     text-decoration: none;
-    background-color: #5d5d5b;
-    color: #fff
+    background-image: url('./../images/zzbg.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    color: #fff;
+    border: none;
   }
 
   .container-content {
@@ -92,7 +113,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        height: calc(100vh - 67px);
+        height: calc(100vh - 95px);
         &:hover {
           overflow: auto;
         }
@@ -106,7 +127,7 @@
 
       .tab-content {
         overflow: auto;
-        height: calc(100vh - 67px);
+        height: calc(100vh - 95px);
       }
     }
   }
@@ -158,12 +179,12 @@
 
 .basic-set {
   color: #ffffff;
-  height: 42px;
-  line-height: 42px;
+  height: 70px;
+  line-height: 70px;
   padding-left: 20px;
   font-weight: bold;
-  font-size: 18px;
-  border-bottom: 1px solid #656565;
+  font-size: 22px;
+  border-bottom: 1px solid #a8a8a8;
 }
 
 .onlineStatus {
@@ -187,7 +208,9 @@
 .checkbox * {
   color: #ffffff;
 }
-
+.checkbox input:checked+span{
+  color:#f00;
+}
 .input-group-addon {
   min-width: 65px;
   padding: 9px 20px !important;
@@ -207,4 +230,11 @@
 }
 .swal-title{
   font-size: 20px !important;
+}
+
+.nav-bg {
+  display: block;
+  position: absolute;
+  height: 78px;
+
 }

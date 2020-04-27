@@ -1,5 +1,5 @@
 var config={
-    prefix:'http://192.168.1.119:7406'
+    prefix:'192.168.1.119:7406'
 }
 
 function transilateBinary(num, Bits=16) {
@@ -29,7 +29,6 @@ function checkPalindrom(str) {
 
 }
 function showSucess(message) {
-    ZENG.msgbox.show(message, 4, 2000);
     swal(message, "", "success");
 }
 function showError(error) {
