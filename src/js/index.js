@@ -143,15 +143,28 @@ $(document).ready(function () {
     $.ajaxSetup({
         dataType: "json",
         contentType: "application/json;charset=utf-8",
-        timeout: 5000,
+        timeout: 10000,
     })
 
-    $(document).bind("ajaxSend", function () {
-        console.log('ajaxStart')
+    $(document).bind("ajaxSend", function (e,xhr,opt) {
+        if(opt.data){
+            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type-send">发送数据:</span>`)
+            addValInTextarea(opt.data)
+        }
+
         $('.loader').css("display", "block");
-    }).bind("ajaxComplete", function () {
-        console.log('ajaxComplete')
+    }).bind("ajaxComplete", function (e,xhr,opt) {
         $('.loader').css("display", "none");
+    }).bind("ajaxSuccess",function(e,xhr,opt){
+        if(xhr.responseText){
+            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type-get">接收数据:</span>`)
+            addValInTextarea(xhr.responseText)
+        }
+    }).bind("ajaxError",function(e,xhr,opt){
+        if(xhr.responseJSON){
+            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type-get-error">错误信息:</span>`)
+            addValInTextarea(xhr.responseJSON.message)
+        }
     });
 
     //开始测试
@@ -166,17 +179,10 @@ $(document).ready(function () {
             swal('请选择端口');
             return false
         }
-        addValInTextarea(JSON.stringify({
-            active: true,
-            baudRate: boderate,
-            dataBits: dataBit,
-            name: port,
-            parity: parity,
-            stopBits: stopBit
-        }))
+
         $.ajax({
             type: "POST",
-            url: `${config.prefix}/serial-port`,
+            url: `http://${config.prefix}/serial-port`,
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
                 active: true,
@@ -208,7 +214,7 @@ $(document).ready(function () {
         const that = this
         $.ajax({
             type: "POST",
-            url: `${config.prefix}/serial-port`,
+            url: `http://${config.prefix}/serial-port`,
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
                 active: false,
@@ -285,6 +291,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 console.log('response:', response);
+                $('#port').empty();
                 for (let i = 0; i < response.length; i++) {
                     $('#port').append(`<option>${response[i].name}</option>`)
                     if (response[i].active) {
@@ -298,7 +305,7 @@ $(document).ready(function () {
 
                     }
                 }
-                showSucess('连接IP成功')
+                showSucess('获取COM端口成功')
 
             },
             error: function (error) {
@@ -316,6 +323,7 @@ $(document).ready(function () {
     $('.change-log-active').click(function () {
         logOpened = !logOpened;
         $(".container-tip").toggleClass("log-active");
+        $(".delete").toggleClass("delete-active");
         changeLoadOpen()
     })
     $('#get-flow').click(function () {
@@ -789,23 +797,90 @@ $(document).ready(function () {
         });
     })
 
+    $('#open-valve').click(function () {
+        const sendData = {};
+        if (!$('#use-broadcast').is(':checked')) {
+            sendData.address = $('#broadcast-address').val().replace(/\s*/g, "")
+        }
+        sendData.valveCtrl=0x01
+        $.ajax({
+            type: "POST",
+            url: `http://${config.prefix}/meter-service/valve-ctrl`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(sendData),
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('开阀成功')
+            },
+            error: function (error) {
+                showError(error)
+            }
+        });
+    })
+    $('#close-valve').click(function () {
+        const sendData = {};
+        if (!$('#use-broadcast').is(':checked')) {
+            sendData.address = $('#broadcast-address').val().replace(/\s*/g, "")
+        }
+        sendData.valveCtrl=0x00
+        $.ajax({
+            type: "POST",
+            url: `http://${config.prefix}/meter-service/valve-ctrl`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(sendData),
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('关阀成功')
+            },
+            error: function (error) {
+                showError(error)
+            }
+        });
+    })
+
+    $('#read-valve').click(function () {
+        const sendData = {};
+        if (!$('#use-broadcast').is(':checked')) {
+            sendData.address = $('#broadcast-address').val().replace(/\s*/g, "")
+        }
+        $.ajax({
+            type: "GET",
+            url: `http://${config.prefix}/meter-service/valve-ctrl`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: sendData,
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('读取水表状态成功')
+            },
+            error: function (error) {
+                showError(error)
+            }
+        });
+    })
+
     function changeLoadOpen() {
         console.log('changeLoadOpen', logOpened)
         if (logOpened) {
-            console.log({maxHeight: "calc(100vh- " + (logHeight + 25 + 42) + "px)"})
-            $(".form-horizontal").css({maxHeight: "calc(100vh - " + (logHeight + 25 + 42) + "px)"});
-            $(".tab-content").css({maxHeight: "calc(100vh - " + (logHeight + 25 + 42) + "px)"});
+            console.log({maxHeight: "calc(100vh- " + (logHeight + 25 + 70) + "px)"})
+            $(".form-horizontal").css({maxHeight: "calc(100vh - " + (logHeight + 25 + 70) + "px)"});
+            $(".tab-content").css({maxHeight: "calc(100vh - " + (logHeight + 25 + 70) + "px)"});
         } else {
-            $(".tab-content").css({maxHeight: "calc(100vh - 67px)"});
-            $(".form-horizontal").css({maxHeight: "calc(100vh - 67px)"});
+            $(".tab-content").css({maxHeight: "calc(100vh - 95px)"});
+            $(".form-horizontal").css({maxHeight: "calc(100vh - 95px)"});
 
         }
     }
 
     function addValInTextarea(value) {
-        let preVal = $('#log-content').val();
-        $('#log-content').val(preVal + value + '\n');
+        $('#log-content').append(`<p>${value}</p>`);
         $('#log-content').scrollTop($('#log-content').scrollTop() + 999);
     }
+
+    $('.delete').click(function () {
+        $('#log-content').empty();
+    })
 
 });

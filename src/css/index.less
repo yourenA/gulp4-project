@@ -126,8 +126,11 @@
       overflow: hidden;
 
       .tab-content {
-        overflow: auto;
+        overflow: hidden;
         height: calc(100vh - 95px);
+        &:hover {
+          overflow: auto;
+        }
       }
     }
   }
@@ -186,6 +189,11 @@
   font-size: 22px;
   border-bottom: 1px solid #a8a8a8;
 }
+.basic-set img{
+  width: 35px;
+  height: 35px;
+  margin-right: 10px;
+}
 
 .onlineStatus {
   width: 100%;
@@ -237,4 +245,44 @@
   position: absolute;
   height: 78px;
 
+}
+#log-content{
+  color: #ffffff;
+  padding: 10px;
+  overflow:hidden;
+  box-sizing: border-box;
+  position: relative;
+  &:hover {
+    overflow: auto;
+  }
+}
+#log-content p{
+  font-size: 16px;
+  margin-bottom: 7px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+.output-type-send{
+  color: #8ed03d;
+}
+.output-type-get{
+  color: #d9534f;
+}
+.output-type-get-error{
+  color: red;
+}
+.output-time{
+  color: #2d91eb;
+}
+.log-content .delete{
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  display: none;
+}
+.log-content .delete-active{
+  display: block;
 }

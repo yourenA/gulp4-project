@@ -20,6 +20,7 @@
     <script src="http://www.jq22.com/demo/jquery-tsk20150817/msgbox.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="http://jiandaoyun.github.io/Perfect-DateTimePicker/dist/jquery.datetimepicker.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 </head>
 <body>
 <div class="loader">
@@ -45,13 +46,13 @@
     <div class="container-content">
         <div class="container-left">
             <div class="basic-set">
-                基本设置
+                <img src="./../images/logo.png" alt="">水表写入器
             </div>
             <form class="form-horizontal">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-4 control-label">服务器地址</label>
                     <div class="col-sm-8">
-                            <input id="ip-address" class="form-control" value="127.0.0.1">
+                            <input id="ip-address" class="form-control"  placeholder="IP:PORT" value="127.0.0.1:7406">
                             <div id="connect-ip" class="btn btn-success   btn-block">获取COM端口</div>
                     </div>
                 </div>
@@ -134,22 +135,20 @@
                     <div class="nav-content">
                         <ul class="nav nav-tabs" style="width: 1500px">
                             <li role="presentation"  class="active"><a href="#getTest" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2020-03-09/政务管理后台系统/img/zz.png" alt="">读调试界面数据</a></li>
-                            <li role="presentation"><a href="#getFlow" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2020-03-09/政务管理后台系统/img/zz.png" alt="">读取流量数据</a></li>
-                            <li role="presentation"><a href="#order" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2020-03-09/政务管理后台系统/img/zz.png" alt="">读取高精度流量数据</a></li>
-                            <li role="presentation"><a href="#write" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2020-03-09/政务管理后台系统/img/zz.png" alt="">写当前数据</a></li>
-                            <li role="presentation"><a href="#startTest" data-toggle="tab">启动检测</a></li>
-                            <li role="presentation"><a href="#changeNumber" data-toggle="tab">修改表号/地址</a></li>
-                            <li role="presentation"><a href="#writeStandardTime" data-toggle="tab">写标准时间</a></li>
-                            <li role="presentation"><a href="#writeStandardTime2" data-toggle="tab">写出厂日期</a></li>
-                            <li role="presentation"><a href="#changeMode" data-toggle="tab">转换运行模式</a></li>
-                            <li role="presentation"><a href="#flowFix" data-toggle="tab">流量修正</a></li>
-                            <li role="presentation"><a href="#usmTest" data-toggle="tab">USM测试</a></li>
-                            <li role="presentation"><a href="#valveContral" data-toggle="tab">阀门控制</a></li>
-                            <li role="presentation"><a href="#readLora" data-toggle="tab">读Lora参数</a>
-                            </li>
-                            <li role="presentation"><a href="#writeLora" data-toggle="tab">写Lora参数</a></li>
-                            <li role="presentation"><a href="#writeMeterParams" data-toggle="tab">写水表参数</a></li>
-                            <li role="presentation"><a href="#custom" data-toggle="tab">自定义</a></li>
+                            <li role="presentation"><a href="#getFlow" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2020-03-09/政务管理后台系统/img/zz04.png" alt="">读取流量数据</a></li>
+                            <li role="presentation"><a href="#order" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_4.png" alt="">读取高精度流量数据</a></li>
+                            <li role="presentation"><a href="#write" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_6.png" alt="">写当前数据</a></li>
+                            <li role="presentation"><a href="#startTest" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_14.png" alt="">启动检测</a></li>
+                            <li role="presentation"><a href="#changeNumber" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_22.png" alt="">修改表号/地址</a></li>
+                            <li role="presentation"><a href="#writeStandardTime" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_12.png" alt="" >写标准时间</a></li>
+                            <li role="presentation"><a href="#writeStandardTime2" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_9.png" alt="">写出厂日期</a></li>
+                            <li role="presentation"><a href="#changeMode" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2018-12-17/办公OA系统/images/icon07.png" alt="">转换运行模式</a></li>
+                            <li role="presentation"><a href="#flowFix" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_17.png" alt="">流量修正</a></li>
+                            <li role="presentation"><a href="#usmTest" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2018-12-17/办公OA系统/images/icon09.png" alt="">USM测试</a></li>
+                            <li role="presentation"><a href="#valveContral" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_5.png" alt="">阀门控制</a></li>
+                            <li role="presentation"><a href="#readLora" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_11.png" alt="">读Lora参数</a></li>
+                            <li role="presentation"><a href="#writeLora" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_1.png" alt="">写Lora参数</a></li>
+                            <li role="presentation"><a href="#writeMeterParams" data-toggle="tab"><img src="https://www.17sucai.com/preview/860087/2018-12-17/办公OA系统/images/icon01.png" alt="">写水表参数</a></li><li role="presentation"><a href="#custom" data-toggle="tab"><img src="https://www.17sucai.com/preview/3250/2013-10-10/demo2/images/icon_19.png" alt="">自定义</a></li>
                         </ul>
                     </div>
 
@@ -702,7 +701,7 @@
                         </div>
                         <div class="form-around-input">
                             <div class="form-group  input-group">
-                                <select class="form-control" id="baudRate">
+                                <select class="form-control" id="valveStatus">
                                     <option>未知</option>
                                     <option>水表不支持阀控</option>
                                     <option>已开</option>
@@ -713,29 +712,29 @@
                                 </select>
                             </div>
                             <div class="form-group  input-group">
-                                <input id="flow-fix1" class="form-control">
+                                <input id="errorCode" class="form-control">
                             </div>
                             <p class="checkbox">
                                 <label>
-                                    <input readonly type="checkbox" id="get-flow-b2"><span>开阀超时</span>
+                                    <input readonly type="checkbox" id="open-valve-timeout"><span>开阀超时</span>
                                 </label>
                             </p>
                             <p class="checkbox">
                                 <label>
-                                    <input readonly type="checkbox" id="get-flow-b3"><span>关阀超时</span>
+                                    <input readonly type="checkbox" id="close-valve-timeout"><span>关阀超时</span>
                                 </label>
                             </p>
                         </div>
                     </div>
                     <div class="btn-around">
                         <div class="form-around-btn">
-                            <button id="set-usmTest" type="button" class="btn  btn-primary  btn-block"
+                            <button id="open-valve" type="button" class="btn  btn-primary  btn-block"
                                     style="margin-bottom: 10px">开阀
                             </button>
-                            <button id="set-usmTest" type="button" class="btn  btn-danger  btn-block"
+                            <button id="close-valve" type="button" class="btn  btn-danger  btn-block"
                                     style="margin-bottom: 10px">关阀
                             </button>
-                            <button id="set-usmTest" type="button" class="btn  btn-success  btn-block">读取阀门状态</button>
+                            <button id="read-valve" type="button" class="btn  btn-success  btn-block">读取阀门状态</button>
                         </div>
                     </div>
                 </div>
@@ -928,7 +927,10 @@
             <span class="change-log-active"><img src="./../images/log.png" alt="">Event log</span>
         </div>
         <div class="log-content">
-            <textarea class="form-control" id="log-content" readonly style="height:250px"></textarea>
+            <div class="output"  id="log-content"  style="height: 250px;">
+
+            </div>
+            <img title="清空Event log"  class="delete" src="./../images/delete.png" alt="">
         </div>
     </div>
 </div>
