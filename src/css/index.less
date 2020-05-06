@@ -205,11 +205,13 @@
   .status-img {
     width: 128px;
     height: 128px;
-    background: url("../images/off.png");
+    background: url("../images/mie.png") center ;
+    background-size: 100%;
   }
 
   .status-img.active {
-    background: url("../images/on.png");
+    background: url("../images/liang.png")  center;
+    background-size: 100%;
   }
 }
 
@@ -263,23 +265,30 @@
   word-wrap: break-word;
 }
 .output-type-send{
-  color: #8ed03d;
+  margin-left: 3px;
+  color: #47e1ed;
 }
 .output-type-get{
-  color: #d9534f;
+  color: #ea924c;
+  margin-left: 3px;
+}
+.output-type{
+  color: #d430cc;
+  margin-left: 3px;
 }
 .output-type-get-error{
-  color: red;
+  margin-left: 3px;
+  color: #ff413c;
 }
 .output-time{
-  color: #2d91eb;
+  color: #04e000;
 }
 .log-content .delete{
   position: absolute;
   right: 20px;
   bottom: 10px;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   cursor: pointer;
   display: none;
 }

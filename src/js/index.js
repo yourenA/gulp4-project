@@ -137,6 +137,13 @@ $(document).ready(function () {
         phone: false,
         blocks: [2, 2, 2, 2]
     });
+
+    new Cleave(document.querySelector('.Cleave8'), {
+        phone: false,
+        blocks: [2, 2, 2, 2, 2, 2, 2,2]
+    });
+
+
     //初始化打开关闭按钮
     checkDisabled()
 
@@ -147,8 +154,9 @@ $(document).ready(function () {
     })
 
     $(document).bind("ajaxSend", function (e,xhr,opt) {
+        let typeMap=`${opt.url.split('/')[opt.url.split('/').length-1]}|${opt.type.toLowerCase()}`
         if(opt.data){
-            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type-send">发送数据:</span>`)
+            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type">${pathMap[typeMap]}</span> <span class="output-type-send">发送数据:</span>`)
             addValInTextarea(opt.data)
         }
 
@@ -156,13 +164,15 @@ $(document).ready(function () {
     }).bind("ajaxComplete", function (e,xhr,opt) {
         $('.loader').css("display", "none");
     }).bind("ajaxSuccess",function(e,xhr,opt){
+        let typeMap=`${opt.url.split('/')[opt.url.split('/').length-1]}|${opt.type.toLowerCase()}`
         if(xhr.responseText){
-            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type-get">接收数据:</span>`)
+            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type">${pathMap[typeMap]}</span>  <span class="output-type-get">接收数据:</span>`)
             addValInTextarea(xhr.responseText)
         }
     }).bind("ajaxError",function(e,xhr,opt){
+        let typeMap=`${opt.url.split('/')[opt.url.split('/').length-1]}|${opt.type.toLowerCase()}`
         if(xhr.responseJSON){
-            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type-get-error">错误信息:</span>`)
+            addValInTextarea(`<span class="output-time">${moment().format('YYYY-MM-DD HH:mm:ss ')}</sapn> <span class="output-type">${pathMap[typeMap]}</span>  <span class="output-type-get-error">错误信息:</span>`)
             addValInTextarea(xhr.responseJSON.message)
         }
     });
@@ -251,7 +261,11 @@ $(document).ready(function () {
     //使输入框disabled
     function checkDisabled() {
         let shouldChangeArr = ['#port', '#baudRate', '#data-bit', '#stop-bit', '#parity', '#open-test']
-        let shouldReverseChangeArr = ['#close-test', '#get-flow', '#read-StandardTime', '#write-StandardTime1', '#start-testing', '#get-preciseFlow', '#write-data', '#get-debugging', '#get-preciseFlow', '#change-number']
+        let shouldReverseChangeArr = ['#close-test', '#get-flow', '#read-StandardTime', '#write-StandardTime1', '#start-testing', '#get-preciseFlow', '#write-data', '#get-debugging', '#get-preciseFlow', '#change-number','#change-meter-number',
+        "#read-StandardTime",'#write-StandardTime','#read-StandardTime2','#write-StandardTime2',
+        "#write-mode","#correction-flow","#start-usmTest","#read-usmTest",
+            "#open-valve","#close-valve","#read-valve","#readLora-btn","#writeLora-btn",
+            "#read-meter-params","#set-meter-params","#custom-flowFix"]
         if (portIsOpened) {
             for (let i = 0; i < shouldChangeArr.length; i++) {
                 $(shouldChangeArr[i]).attr({
@@ -463,7 +477,7 @@ $(document).ready(function () {
             },
             error: function (error) {
                 console.log('error', error);
-                showSucess('获取成功')
+                showError(error)
             }
         });
     })
@@ -860,7 +874,54 @@ $(document).ready(function () {
             }
         });
     })
-
+    $('#readLora-btn').click(function () {
+        const sendData = {};
+        if (!$('#use-broadcast').is(':checked')) {
+            sendData.address = $('#broadcast-address').val().replace(/\s*/g, "")
+        }
+        $.ajax({
+            type: "GET",
+            url: `http://${config.prefix}/meter-service/lora-params`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: sendData,
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('读取Lora参数成功')
+                for (let key in response) {
+                    if ($(`#get-lora-params-${key}` && $(`#meter-params-${key}`).tagName === 'INPUT')) {
+                        $(`#get-lora-params-${key}`).val(response[key])
+                    }
+                }
+            },
+            error: function (error) {
+                showError(error)
+            }
+        });
+    })
+    $('#writeLora-btn').click(function () {
+        const sendData = {};
+        if (!$('#use-broadcast').is(':checked')) {
+            sendData.address = $('#broadcast-address').val().replace(/\s*/g, "")
+        }
+        sendData.devEui = $('#write-lora-params-devEui').val().replace(/\s*/g, "");
+        sendData.companyCode = $('#write-lora-params-companyCode').val().replace(/\s*/g, "");
+        console.log('sendData',sendData)
+        $.ajax({
+            type: "POST",
+            url: `http://${config.prefix}/meter-service/lora-params`,
+            dataType: "json",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(sendData),
+            success: function (response) {
+                console.log('response:', response);
+                showSucess('设置Lora参数成功')
+            },
+            error: function (error) {
+                showError(error)
+            }
+        });
+    })
     function changeLoadOpen() {
         console.log('changeLoadOpen', logOpened)
         if (logOpened) {
