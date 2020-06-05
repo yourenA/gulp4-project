@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/flat-ui/2.3.0/css/flat-ui.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/leaflet/1.6.0/leaflet.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://brandonxiang.github.io/leaflet.marker.highlight/index.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/flat-ui/2.3.0/js/flat-ui.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/leaflet/1.6.0/leaflet.js"></script>
+    <script src="https://brandonxiang.github.io/leaflet.marker.highlight/index.js"></script>
+    <script src="http://htoooth.github.io/Leaflet.ChineseTmsProviders/src/leaflet.ChineseTmsProviders.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-embossed" role="navigation" style="margin-bottom: 0; border-radius: 0; z-index:2">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+            <span class="sr-only">Toggle navigation</span>
+        </button>
+        <a class="navbar-brand" href="#">Flat UI</a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-collapse-01">
+        <ul class="nav navbar-nav navbar-left">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">leafelt不同底图加载方式
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a id="mapbox_Image" href='JavaScript:void(0)' onclick='setLayer("mapbox_Image")'>leafleat加载彩色影像世界地图</a>
+                    </li>
+                    <li>
+                        <a id="mapbox_Vector" href='JavaScript:void(0)' onclick='setLayer("mapbox_Vector")'>leafleat加载彩色矢量世界地图</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="JavaScript:void(0)" class="dropdown-toggle" data-toggle="dropdown">地图缩放
+                    <b class="caret"></b>
+                </a>
+                <span class="dropdown-arrow"></span>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="JavaScript:void(0)" onclick="setZoom()">setZoom() 改变到图层10</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:void(0)" onclick="setZoomIn()">zoomIn() 图层往里进一个图层</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:void(0)" onclick="setZoomOut()">zoomOut() 图层往里出一个图层</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="JavaScript:void(0)" class="dropdown-toggle" data-toggle="dropdown">地图定位
+                    <b class="caret"></b>
+                </a>
+                <span class="dropdown-arrow"></span>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="JavaScript:void(0)" onclick="panTo()">panTo() 地图平移到点</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:void(0)" onclick="flyTo()">flyTo() 地图飞到点</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:void(0)" onclick="fitBounds()">fitBounds() 平移到一个区域</a>
+                        <a href="JavaScript:void(0)" onclick="flyToBounds()">flyToBounds() 飞到一个区域</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <form class="navbar-form navbar-right" action="#" role="search">
+            <div class="form-group">
+                <div class="input-group">
+                    <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+                    <span class="input-group-btn">
+                            <button type="submit" class="btn">
+                                <span class="fui-search"></span>
+                            </button>
+                        </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- /.navbar-collapse -->
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12" id="mapDiv" style="position: absolute;top: 53px;bottom: 0;z-index:1"></div>
+        <!-- 地图面板 -->
+        <!--底部状态栏部分 -->
+    </div>
+</div>
+<script>
+    console.log('L',L)
+    const urlTemplate = {
+        //在mapbox自定义的影像地图
+        mapbox_Image: "https://api.mapbox.com/styles/v1/yqcim/cizh1ma3400ez2so5x1anhuzo/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoieXFjaW0iLCJhIjoiY2l6ZmhnZjExMDBhajJ4cGxnNGN5MnhpdCJ9.pcZtdfk8mSFboCdwqkvW6g",
+        //在mapbox自定义的矢量地图
+        mapbox_Vector: "https://api.mapbox.com/styles/v1/liuvigongzuoshi/cjbf0ypqz8wp62ro6iayiivzy/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGl1dmlnb25nenVvc2hpIiwiYSI6ImNqYmYwd24wczJyd24yeGxsMWE5bGpxaGkifQ.CVKELjW5ASK8EnQfQCbxFw",
+        //在mapbox地图接口
+        mapbox_url: 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw',
+        // 影像地图
+        SYS_CQMap_IMG_MAPSERVER_PATH: "http://www.cqzhsq.cn:8070/services/RES_SGHJH/zqsyxt/SfX9OrRJmFf1oU4uoMXlOw",
+        // 影像注记
+        SYS_CQMap_IMG_LABEL_MAPSERVER_PATH: "http://www.cqzhsq.cn:8092/RemoteRest/services/CQMap_IMG_LABEL/MapServer",
+        // 矢量地图
+        SYS_CQMap_VEC_MAPSERVER_PATH: "http://www.cqzhsq.cn:8070/services/RES_SGHJR/zqsslt/SfX9OrRJmFf1oU4uoMXlOw",
+        // 地形地图
+        SYS_CQMap_DEM_MAPSERVER_PATH: "http://www.cqzhsq.cn:8070/services/RES_SGHJXU/zqsyt/SfX9OrRJmFf1oU4uoMXlOw"
+    }
+
+    var normalm = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+            maxZoom: 18,
+            minZoom: 5
+        }),
+        normala = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+            maxZoom: 18,
+            minZoom: 5
+        }),
+        imgm = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+            maxZoom: 18,
+            minZoom: 5
+        }),
+        imga = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+            maxZoom: 18,
+            minZoom: 5
+        });
+
+    var normal = L.layerGroup([normalm, normala]),
+        image = L.layerGroup([imgm, imga]);
+
+    var baseLayers = {
+        "地图": normal,
+        "影像": image,
+    }
+
+    var overlayLayers = {
+
+    }
+
+    var map = L.map("mapDiv", {
+        center: [42.948668, 89.178466],
+        zoom: 12,
+        layers: [normal],
+        zoomControl: false
+    });
+
+    L.control.layers(baseLayers, overlayLayers).addTo(map);
+    L.control.zoom({
+        zoomInTitle: '放大',
+        zoomOutTitle: '缩小'
+    }).addTo(map);
+
+
+    // const marker =L.marker([42.958668, 89.178466], {
+    //     highlight: "permanent" //永久高亮显示
+    // }).addTo(map);
+    //
+    // // 绑定一个提示标签
+    // marker.bindTooltip('这是个Marker', { direction: 'top' });
+
+
+    //自定义一个maker
+    const greenIcon = L.icon({
+        iconUrl: 'http://111.75.54.230:8086/upload/5/5c/5c75e76cebd9df08d84803a9.png',
+        iconSize: [26,26], // size of the icon
+    });
+    const greenIcon2 = L.icon({
+        iconUrl: 'http://111.75.54.230:8086/upload/5/5c/5c75e771ebd9df08d84803ac.png',
+        iconSize: [26,26], // size of the icon
+    });
+
+    //maker上自定义一个popup
+    const html = '<p>Hello world!<br />This is a nice popup.</p>';
+
+    const oMarker = L.marker([42.948668, 89.178466], { icon: greenIcon }).addTo(map);
+    // 绑定一个提示标签
+    const popup = oMarker.bindPopup(html, {closeOnClick:false,autoClose:false, maxHeight: 250, maxWidth: 490, className: 'content22', offset: [0, 0] }).on('popupopen', function (params) {
+        console.log(params)
+    }).openPopup();
+
+    const oMarker2 = L.marker([42.958668, 89.158466], { icon: greenIcon2 }).addTo(map);
+    // 绑定一个提示标签
+    const popup2 = oMarker2.bindPopup(html, {closeOnClick:false,autoClose:false,maxHeight: 250, maxWidth: 490, className: 'content22', offset: [0, 0] }).on('popupopen', function (params) {
+        console.log(params)
+    }).openPopup();
+
+
+    const mypop = L.popup({
+        autoClose:false
+    });
+
+    map.on('click', function (e) {
+        mypop.setLatLng(e.latlng)
+            .setContent('你临幸了这个点：<br>' + e.latlng.toString())
+            .openOn(map);
+        return false
+    });
+
+
+    const setZoom = () => {
+        map.setZoom(10, {
+            // animate: false
+        })  //设置地图缩放到
+    }
+
+    const setZoomIn = () => {
+        map.zoomIn() //图层往里进一个图层，放大
+    }
+
+    const setZoomOut = () => {
+        map.zoomOut()  //图层往里出一个图层，缩小
+    }
+
+
+    const panTo = () => {
+        map.panTo([37.91082, 128.73583], {
+            animate: true
+        }) //地图平移，默认就是true，将地图平移到给定的中心。如果新的中心点在屏幕内与现有的中心点不同则产生平移动作。
+    }
+
+    const flyTo = () => {
+        map.flyTo([36.52, 120.31]); // 点到点的抛物线动画，平移加缩放动画
+    }
+
+    let polygon = L.polygon([[37, -109.05], [41, -109.03], [41, -102.05], [37, -102.04]],
+        [40.774, -74.125], {
+            color: 'green',
+            fillColor: '#f03',
+            fillOpacity: 0.5
+        }).addTo(map); //地图上绘制一个多边形
+
+    const fitBounds = () => {
+        console.log(polygon.getBounds())
+        map.fitBounds(polygon.getBounds());  //getBounds（获取边界）：返回地图视图的经纬度边界。
+        //平移到一个区域上面，自动判断区域块的大小，合适缩放图层
+    }
+
+    const flyToBounds = () => {
+        map.flyToBounds(polygon.getBounds());   //getBounds（获取边界）：返回地图视图的经纬度边界。
+        //飞到这个多变形区域上面，自动判断区域块的大小，合适缩放图层，将地图视图尽可能大地设定在给定的地理边界内。
+    }
+
+    const setLayer = (ele) => {
+        map.removeLayer(Baselayer)
+        if (ele == "mapbox_Image") {
+            Baselayer = L.tileLayer(urlTemplate.mapbox_Image, {
+                maxZoom: 17,
+                minZoom: 2
+            }).addTo(map);
+        } else if (ele == "mapbox_Vector") {
+            Baselayer = L.tileLayer(urlTemplate.mapbox_Vector, {
+                maxZoom: 17,
+                // minZoom: 2
+            }).addTo(map);
+            console.log(Baselayer)
+        }
+    }
+
+
+    const setLayer2 = (layerUrls, maxZoom) => {
+        for (let i = 0; i < oLayer.length; i++) {
+            map.removeLayer(oLayer[i]) //将图层在地图上移除
+        }
+        oLayer = [] //制空数组
+        layerUrls.map((item) => {
+            oLayer.push(L.esri.tiledMapLayer({
+                url: item,
+                useCors: false,
+                maxZoom: maxZoom, // 设置最大放大图层值
+            }).addTo(map));
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        html, body {
+            border: 0;
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            background: #000;
+            overflow: hidden;
+        }
+
+        #video {
+            object-fit: fill;
+            height: 100%;
+            width: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+<script src="http://111.75.54.230:8086/fstatic/js/jquery.min.js"></script>
+<script src="http://111.75.54.230:8086/fstatic/js/jmuxer.min.js"></script>
+<script>
+    var a='http://111.75.54.230:8086/fstatic/h264/index.html?stream=trans%3A%2F%2F172.16.6.100%3A80%23hik.isecure%2F26283995%2FtyahDhwu1HTy46xhG0Kg%2Fb102dcbbcb7f4a958ce060b69ac31ae3%2F1%2Frtsp%2F1'
+    $(function () {
+
+        var PLAYER = null;
+
+        function Stop() {
+            if (PLAYER) {
+                PLAYER.socket && PLAYER.socket.close();
+                PLAYER.client && PLAYER.client.destroy();
+                PLAYER = null;
+            }
+            $("#video").remove();
+        }
+
+        function Play(url) {
+            url = $.trim(url);
+            if (!url) {
+                return;
+            }
+
+            var URL_TRANSER = {
+                /**********************************************************************
+                 * hik.isecure
+                 * https://open.hikvision.com/docs/0fef29dc0fce1e4c5b6f13393a7c1921
+                 * trans://IP:端口#hik.isecure/appKey/appSecret/cameraIndexCode/streamType/protocol/transmode
+                 **********************************************************************/
+                _getParams: function(url){
+                    var ps = url.replace(/^trans/, "http").split("#");
+                    console.log('ps',ps)
+                    var host = ps[0];
+                    var params = ps[1].split("/");
+                    var type = params.shift();
+                    var key = params.shift();
+                    var secret = params.shift();
+                    return {type: type, host: host, key: key, secret: secret, params: params};
+                },
+                _needTrans: function(url){
+                    return /^trans:\/\//.test(url);
+                },
+                trans: function(url, callback){
+                    console.log('this._needTrans(url)',this._needTrans(url))
+                    callback('rtsp://172.16.6.100:554/openUrl/4B2fTvq');
+                    return;
+
+                    if(!this._needTrans(url)){
+                        callback(url);
+                        return;
+                    }
+
+                    var params = this._getParams(url);
+                    console.log('params',params)
+                    $.ajax({
+                        async: true, cache: false, contentType: "application/json", dataType: "html",
+                        type: "POST", url: "http://111.75.54.230:8086/fvideo/trans/" + params.type + ".json",
+                        data: JSON.stringify(params),
+                        success: function(data){
+                            // data格式为:rtsp://172.16.6.100:554/openUrl/qImk7le
+                            callback(data);
+                        },
+                        error: function(e){
+                            console.error(e);
+                        }
+                    });
+                }
+            };
+            var flag=true
+            URL_TRANSER.trans(url, function (stream) {
+                if(flag)console.log('stream',stream)
+                $("<video></video>").attr("id", "video").attr("name", "video")
+                    .attr("autoplay", true)
+                    .appendTo("body");
+
+                // var server = location.origin.replace("http", "ws");
+                var server='ws://111.75.54.230:8086'
+                PLAYER = {};
+                PLAYER.client = new JMuxer({node: "video", mode: "video", debug: false});
+
+                PLAYER.socket = new WebSocket(server + "/nvr?stream=" + stream);
+                PLAYER.socket.binaryType = "arraybuffer";
+
+                PLAYER.socket.onmessage = function (e) {
+                    if(flag)console.log('e',e)
+                    var input = new Uint8Array(e.data),
+                        dv = new DataView(input.buffer),
+                        duration,
+                        audioLength,
+                        video;
+                    if(flag)console.log('input',input)
+                    if(flag)console.log('dv',dv)
+                    duration = dv.getUint16(0, true);
+                    audioLength = dv.getUint16(2, true);
+                    video = input.subarray(audioLength + 4);
+                    if(flag)console.log('duration',duration)
+                    if(flag)console.log('audioLength',audioLength)
+                    console.log('video',video)
+
+                    PLAYER.client.feed({video: video, duration: 100});
+                    flag=false
+                };
+            });
+        }
+
+        $(window).on("unload", function () {
+            Stop();
+        });
+
+        var stream = decodeURIComponent(GetUrlParam("stream"));
+        console.log('stream',stream)
+        if (stream) {
+            Play(stream);
+        }
+
+        function GetUrlParam(Key){
+            var Regex = new RegExp("[\?&]" + Key + "=[^&]+", "g");
+            var Result = window.location.search.match(Regex);
+            if(Result && Result.length > 0){
+                return Result[0].substr(Result[0].indexOf("=") + 1);
+            }
+            else{
+                return null;
+            }
+        }
+    });
+</script>
+<video id="video" name="video" autoplay="autoplay"></video>
+</body>
+</html>
